@@ -33,7 +33,7 @@ r_user = requests.get(uri,headers=head,stream=True)
 
 # keyword parsing
 with open(base+'/keyword.txt','r') as f:
-    kw = f.read().split('\n')
+    kw = f.read().split('\n')[:-1]
 
 def send_tg_message(t):
     bot.sendMessage(chat_id=chatid,text=t)
@@ -51,3 +51,6 @@ for l in r_user.iter_lines():
         for keyword in kw:
             if keyword in content:
                 send_tg_message(content)
+    except:
+        print('error')
+        print(dec)
