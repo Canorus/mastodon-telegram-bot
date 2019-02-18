@@ -18,6 +18,7 @@ bot = telegram.Bot(token = mytoken)
 # bot.sendMessage(chat_id=chatid, text = str('message_content_here'))
 
 # start timeline streaming
+
 try:
     with open('config.json','r') as f:
         cred = json.loads(f.read())
@@ -37,7 +38,15 @@ with open(base+'/keyword.txt','r') as f:
 
 def send_tg_message(t):
     bot.sendMessage(chat_id=chatid,text=t)
-
+def strip(t):
+    t = re.sub('</p><p>','\n',t)
+    t = re.sub('(<.?p>|<.?a.*?>|<.?span.*?>)','',t)
+    t = re.sub('&lt;','<',t)
+    t = re.sub('&gt;','>',t)
+    t = re.sub('&apos;','\'',t)
+    t = re.sub('&quot;','\'',t)
+    t = re.sub('<br.*?\/?>','\n',t)
+    print(t)
 # run timeline streaming
 
 for l in r_user.iter_lines():
@@ -50,7 +59,7 @@ for l in r_user.iter_lines():
             content = newdec['content']
         for keyword in kw:
             if keyword in content:
-                send_tg_message(content)
+                send_tg_message(strip(content))
     except:
         print('error')
         print(dec)
